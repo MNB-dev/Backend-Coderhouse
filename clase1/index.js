@@ -45,5 +45,4 @@ const nombreCompleto = usuario.getFullName();
 
 console.log(`Nombre completo: ${nombreCompleto}.`);
 console.log(`Cantidad de mascotas: ${cantMascotas}.`);
-console.log('Libros: ');
-console.log(libros);
+console.log(`Libros: ${libros}`);
