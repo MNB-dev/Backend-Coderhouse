@@ -94,14 +94,13 @@ contenedor
     }
 
     console.log("Lista con más elementos: ", await contenedor.getAll());
-  })
-  .then(async () => {
+
     const producto = await contenedor.getById(id);
     console.log("Producto: ", producto);
+
     await contenedor.deleteById(producto[0].id);
     console.log("Lista sin producto: ", await contenedor.getAll());
-  })
-  .then(async () => {
+
     await contenedor.deleteAll();
     console.log("Lista vacia: ", await contenedor.getAll());
   });
