@@ -1,8 +1,8 @@
 const express = require('express');
-const productos = require('../productos/productos')
 const router = express.Router();
 
-router.get('/productos', productos.getAll);
-router.get('/productosRandom', productos.getRandom);
+router.get('/', function(req, res, next) {
+    res.render('index', { title: 'Express' });
+});
 
 module.exports = router;

@@ -1,12 +1,19 @@
 const createError = require('http-errors');
 const express = require('express');
+const path = require('path');
+const productosRouter = require('./routes/productos');
 const indexRouter = require('./routes/index');
-const productos = require('./productos/productos');
 
 const app = express();
 
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use('/', indexRouter);
+app.use('/api', productosRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -23,8 +30,6 @@ app.use(function(err, req, res, next) {
   res.json({ error: true, message: err.message });
 });
 
-app.listen(8080, () => {
-  productos.create();
-})
+app.listen(8080)
 
 module.exports = app;

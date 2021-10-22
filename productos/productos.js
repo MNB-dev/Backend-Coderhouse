@@ -8,10 +8,12 @@ class Contenedor {
     try {
       let data = await fs.promises.readFile(url, "utf-8");
       data = JSON.parse(data);
-      object.id = data.length + 1;
+      object.id = object.id ? object.id : data.length + 1;
       data.push(object);
 
       await fs.promises.writeFile(url, JSON.stringify(data, null, 2), "utf-8");
+
+      return object;
     } catch (error) {
       console.log(error);
     }
@@ -23,8 +25,10 @@ class Contenedor {
       data = JSON.parse(data);
 
       let product = data.filter((element) => {
-        return element.id === id;
+        return element.id == id;
       });
+
+      if (product.length == 0) product = {error: 'Producto no encontrado.'}
 
       return product;
     } catch (error) {
@@ -32,17 +36,25 @@ class Contenedor {
     }
   }
 
-  async getRandom() {
+  async update(id, body) {
     try {
       let data = await fs.promises.readFile(url, "utf-8");
       data = JSON.parse(data);
-      const num = (Math.random() * data.length).toFixed();
 
       let product = data.filter((element) => {
-        return element.id == num;
+        if(element.id == id) {
+          element.title = body.title;
+          element.price = body.price;
+          element.thumbnail = body.thumbnail;
+        };
+
+        return element;
       });
 
-      return product;
+      await this.deleteById(id);
+      await this.save(product[0]);
+
+      return product[0];
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +75,7 @@ class Contenedor {
       data = JSON.parse(data);
 
       data = data.filter((element) => {
-        return element.id !== id;
+        return element.id != id;
       });
 
       await fs.promises.writeFile(url, JSON.stringify(data, null, 2));
@@ -100,23 +112,49 @@ module.exports = {
       next(e);
     }
   },
-  create: async (req, res, next) => {
+  getById: async function (req, res, next) {
     try {
-      const objetosAGuardar = 3;
       const contenedor = new Contenedor();
-      const productos = await contenedor.getAll();
-
-      if(productos.length >= 3) return;
- 
-      for (let index = 0; index < objetosAGuardar; index++) {
-        await contenedor.save({
-          title: `test ${index}`,
-          price: 120 + index,
-          thumbnail: `test ${index}`,
-        });
-      }
+      const producto = await contenedor.getById(req.params.id);
+      res.json(producto);
     } catch (e) {
       next(e);
     }
-  }
+  },
+  update: async function (req, res, next) {
+    try {
+      const contenedor = new Contenedor();
+      const producto = await contenedor.update(
+        req.params.id,
+        req.body
+      );
+      res.json(producto);
+    } catch (e) {
+      next(e);
+    }
+  },
+  delete: async function (req, res, next) {
+    try {
+      const contenedor = new Contenedor();
+      await contenedor.deleteById(req.params.id);
+      res.json("Producto eliminado.");
+    } catch (e) {
+      next(e);
+    }
+  },
+  create: async (req, res, next) => {
+    try {
+      const contenedor = new Contenedor();
+      const producto = await contenedor.save({
+        title: req.body.title,
+        price: req.body.price,
+        thumbnail: req.body.thumbnail,
+      });
+
+      res.json(producto);
+    } catch (e) {
+      console.log(e);
+      next(e);
+    }
+  },
 };
