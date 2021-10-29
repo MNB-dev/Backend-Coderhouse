@@ -98,9 +98,9 @@ module.exports = {
     try {
       const contenedor = new Contenedor();
       const productos = await contenedor.getAll();
-      res.json(productos);
+      return productos;
     } catch (e) {
-      next(e);
+      console.log(e);
     }
   },
   getRandom: async (req, res, next) => {
@@ -145,13 +145,11 @@ module.exports = {
   create: async (req, res, next) => {
     try {
       const contenedor = new Contenedor();
-      const producto = await contenedor.save({
+      return await contenedor.save({
         title: req.body.title,
         price: req.body.price,
         thumbnail: req.body.thumbnail,
       });
-
-      res.json(producto);
     } catch (e) {
       console.log(e);
       next(e);
