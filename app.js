@@ -3,12 +3,24 @@ const express = require('express');
 const path = require('path');
 const productosRouter = require('./routes/productos');
 const indexRouter = require('./routes/index');
+const hb = require('express-handlebars');
 
 const app = express();
 
+app.engine(
+  "hbs",
+  hb({
+    extname:".hbs",
+    defaultLayout:"index.hbs",
+    layoutsDir: __dirname + "/views/layout",
+    partialsDir:__dirname + "/views/partials/"
+  })
+);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'hbs');
+app.use(express.static(path.join(__dirname + '../public')));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
