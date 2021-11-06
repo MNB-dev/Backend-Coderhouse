@@ -7,7 +7,7 @@ const hb = require('express-handlebars');
 const { Server: HttpServer } = require('http');
 const { Server: IOServer } = require('socket.io');
 const PORT = 8080;
-const personas = [];
+const productos = [];
 
 const app = express();
 const httpServer = new HttpServer(app);
@@ -17,15 +17,15 @@ const io = new IOServer(httpServer);
 // configuro el socket
 
 io.on('connection', async socket => {
-  console.log('Nuevo cliente conectado!');
+  //console.log('Nuevo cliente conectado!');
 
-  // carga inicial de personas
-  socket.emit('personas', personas);
+  // carga inicial de productos
+  socket.emit('productos', productos);
 
-  // actualizacion de personas
-  socket.on('update', persona => {
-      personas.push(persona)
-      io.sockets.emit('personas', personas);
+  // actualizacion de productos
+  socket.on('update', producto => {
+      productos.push(producto)
+      io.sockets.emit('productos', productos);
   })
 });
 
