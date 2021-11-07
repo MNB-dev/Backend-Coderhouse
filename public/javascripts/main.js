@@ -49,12 +49,11 @@ async function manejarEventoPersona(msjs) {
         " " +
         d.getHours() +
         ":" +
-        d.getMinutes() + 
+        d.getMinutes() +
         ":" +
         d.getSeconds();
-      return `${msj.mail} ${datestring} --- Mensaje: ${msj.mensaje}`;
+      return `<h4 class="m-3"><span class="mail">${msj.mail} </span><span class="hora">${datestring} </span><span class="mensaje">${msj.mensaje}</span></h4>`;
     })
     .join("<br>");
-
   document.getElementById("Persona").innerHTML = mensajesHTML;
 }

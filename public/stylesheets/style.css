@@ -6,3 +6,24 @@ body {
 a {
   color: #00B7FF;
 }
+
+#Persona {
+  background-color: #7080901a;
+  padding: 6px;
+}
+
+.mail {
+  color: blue;
+  font-weight: bold;
+  font-size: medium;
+}
+
+.hora {
+  color:chocolate;
+  font-size: medium;
+}
+
+.mensaje {
+  color: green;
+  font-size: medium;
+}

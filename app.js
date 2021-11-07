@@ -6,6 +6,7 @@ const indexRouter = require("./routes/index");
 const hb = require("express-handlebars");
 const { Server: HttpServer } = require("http");
 const { Server: IOServer } = require("socket.io");
+const msgService = require("./service/mensajes");
 const PORT = 8080;
 const productos = [];
 const mensajes = [];
@@ -29,6 +30,7 @@ io.on("connection", async (socket) => {
   socket.emit("mensajes", mensajes);
   socket.on("update-persona", (data) => {
     mensajes.push(data);
+    msgService.create(mensajes);
     io.sockets.emit("mensajes", mensajes);
   });
 });
