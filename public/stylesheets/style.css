@@ -26,4 +26,5 @@ a {
 .mensaje {
   color: green;
   font-size: medium;
+  font-style: italic;
 }
