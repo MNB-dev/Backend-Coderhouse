@@ -1,5 +1,5 @@
 const fs = require("fs");
-const url = "./public/productos.txt";
+const url = "./public/carrito.txt";
 
 class Contenedor {
   constructor() {}
@@ -28,7 +28,7 @@ class Contenedor {
         return element.id == id;
       });
 
-      if (product.length == 0) product = {error: 'Producto no encontrado.'}
+      if (product.length == 0) product = {error: 'Carrito no encontrado.'}
 
       return product;
     } catch (error) {
@@ -94,29 +94,11 @@ class Contenedor {
 }
 
 module.exports = {
-  getAll: async (req, res, next) => {
-    try {
-      const contenedor = new Contenedor();
-      const productos = await contenedor.getAll();
-      return productos;
-    } catch (e) {
-      console.log(e);
-    }
-  },
-  getRandom: async (req, res, next) => {
-    try {
-      const contenedor = new Contenedor();
-      const producto = await contenedor.getRandom();
-      res.json(producto);
-    } catch (e) {
-      next(e);
-    }
-  },
   getById: async function (req, res, next) {
     try {
       const contenedor = new Contenedor();
-      const producto = await contenedor.getById(req.params.id);
-      res.json(producto);
+      const productos = await contenedor.getById(req.params.id);
+      res.json(productos);
     } catch (e) {
       next(e);
     }
@@ -137,7 +119,7 @@ module.exports = {
     try {
       const contenedor = new Contenedor();
       await contenedor.deleteById(req.params.id);
-      res.json("Producto eliminado.");
+      res.json("Carrito eliminado.");
     } catch (e) {
       next(e);
     }
@@ -146,9 +128,16 @@ module.exports = {
     try {
       const contenedor = new Contenedor();
       return await contenedor.save({
-        title: req.body.title,
-        price: req.body.price,
-        thumbnail: req.body.thumbnail,
+          timestamp: Date.now(),
+          produto: {
+            name: req.body.name,
+            price: req.body.price,
+            description: req.body.description,
+            code: req.body.code,
+            picture: req.body.picture,
+            stock: req.body.stock,
+            timestamp: Date.now()
+          }
       });
     } catch (e) {
       console.log(e);

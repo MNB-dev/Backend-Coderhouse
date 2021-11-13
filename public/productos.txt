@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "name": "testeando update",
+    "price": 800,
+    "description": "test",
+    "code": 5,
+    "picture": "pic",
+    "stock": 1,
+    "timestamp": 1636845941627,
+    "id": 1
+  },
+  {
+    "name": "test3",
+    "price": 500,
+    "description": "test",
+    "code": 5,
+    "picture": "pic",
+    "stock": 8,
+    "timestamp": 1636845950770,
+    "id": 2
+  },
+  {
+    "name": "testeando update02",
+    "price": 800,
+    "description": "test",
+    "code": 5,
+    "picture": "pic",
+    "stock": 1,
+    "timestamp": 1636846327810,
+    "id": 3
+  }
+]
