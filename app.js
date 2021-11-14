@@ -2,6 +2,7 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const productosRouter = require('./routes/productos');
+const carritoRouter = require('./routes/carrito');
 const indexRouter = require('./routes/index');
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/', indexRouter);
 app.use('/api', productosRouter);
+app.use('/api', carritoRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

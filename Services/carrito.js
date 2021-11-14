@@ -28,7 +28,7 @@ class Contenedor {
         return element.id == id;
       });
 
-      if (product.length == 0) product = {error: 'Carrito no encontrado.'}
+      if (product.length == 0) product = { error: "Producto no encontrado." };
 
       return product;
     } catch (error) {
@@ -40,21 +40,19 @@ class Contenedor {
     try {
       let data = await fs.promises.readFile(url, "utf-8");
       data = JSON.parse(data);
-
       let product = data.filter((element) => {
-        if(element.id == id) {
-          element.title = body.title;
-          element.price = body.price;
-          element.thumbnail = body.thumbnail;
-        };
+        if (element.id == id) {
+          body.id = element.productos.length + 1;
+          element.productos.push(body);
+        }
 
         return element;
       });
 
       await this.deleteById(id);
-      await this.save(product[0]);
+      await this.save(product[id - 1]);
 
-      return product[0];
+      return product[id - 1];
     } catch (error) {
       console.log(error);
     }
@@ -84,9 +82,20 @@ class Contenedor {
     }
   }
 
-  async deleteAll() {
+  async deleteProductoById(carritoId, productoId) {
     try {
-      await fs.promises.writeFile(url, JSON.stringify([], null, 2));
+      let data = await fs.promises.readFile(url, "utf-8");
+      data = JSON.parse(data);
+
+      data.forEach((element) => {
+        if(element.id == carritoId) {
+          element.productos = element.productos.filter((p) => {
+            return p.id != productoId
+          });
+        }
+      });
+
+      await fs.promises.writeFile(url, JSON.stringify(data, null, 2));
     } catch (error) {
       console.log(error);
     }
@@ -94,23 +103,21 @@ class Contenedor {
 }
 
 module.exports = {
-  getById: async function (req, res, next) {
+  getProducts: async function (req, res, next) {
     try {
       const contenedor = new Contenedor();
-      const productos = await contenedor.getById(req.params.id);
-      res.json(productos);
+      const carrito = await contenedor.getById(req.params.id);
+      res.json(carrito[0].productos);
     } catch (e) {
+      console.log(e);
       next(e);
     }
   },
-  update: async function (req, res, next) {
+  deleteProducto: async function (req, res, next) {
     try {
       const contenedor = new Contenedor();
-      const producto = await contenedor.update(
-        req.params.id,
-        req.body
-      );
-      res.json(producto);
+      await contenedor.deleteProductoById(req.params.id, req.params.id_prod);
+      res.json("Producto eliminado del carrito.");
     } catch (e) {
       next(e);
     }
@@ -124,21 +131,25 @@ module.exports = {
       next(e);
     }
   },
-  create: async (req, res, next) => {
+  addProducto: async (req, res, next) => {
     try {
       const contenedor = new Contenedor();
-      return await contenedor.save({
-          timestamp: Date.now(),
-          produto: {
-            name: req.body.name,
-            price: req.body.price,
-            description: req.body.description,
-            code: req.body.code,
-            picture: req.body.picture,
-            stock: req.body.stock,
-            timestamp: Date.now()
-          }
+      const carrito = await contenedor.update(req.params.id, req.body);
+      res.json(carrito);
+    } catch (e) {
+      console.log(e);
+      next(e);
+    }
+  },
+  createCarrito: async (req, res, next) => {
+    try {
+      const contenedor = new Contenedor();
+      const carrito = await contenedor.save({
+        timestamp: Date.now(),
+        productos: [],
       });
+
+      res.json(`Se creó un carrito con id: ${carrito.id}`);
     } catch (e) {
       console.log(e);
       next(e);
