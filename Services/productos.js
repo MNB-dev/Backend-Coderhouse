@@ -117,7 +117,7 @@ module.exports = {
       console.log(e);
     }
   },
-  update: async function (req, res, next) {
+  update: async (req, res, next) => {
     try {
       const contenedor = new Contenedor();
       const producto = await contenedor.update(
@@ -129,7 +129,7 @@ module.exports = {
       next(e);
     }
   },
-  delete: async function (req, res, next) {
+  delete: async (req, res, next) => {
     try {
       const contenedor = new Contenedor();
       await contenedor.deleteById(req.params.id);

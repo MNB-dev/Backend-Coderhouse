@@ -109,7 +109,7 @@ class Contenedor {
 }
 
 module.exports = {
-  getProducts: async function (req, res, next) {
+  getProducts: async (req, res, next) => {
     try {
       const contenedor = new Contenedor();
       const carrito = await contenedor.getById(req.params.id);
@@ -119,7 +119,7 @@ module.exports = {
       next(e);
     }
   },
-  deleteProducto: async function (req, res, next) {
+  deleteProducto: async (req, res, next) => {
     try {
       const contenedor = new Contenedor();
       await contenedor.deleteProductoById(req.params.id, req.params.id_prod);
@@ -128,7 +128,7 @@ module.exports = {
       next(e);
     }
   },
-  delete: async function (req, res, next) {
+  delete: async (req, res, next) => {
     try {
       const contenedor = new Contenedor();
       await contenedor.deleteById(req.params.id);
