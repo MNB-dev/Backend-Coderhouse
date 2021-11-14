@@ -12,12 +12,12 @@ const admin = toBoolean(process.env.ADMIN);
 const app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+/*app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');*/
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/', indexRouter);
+//app.use('/', indexRouter);
 app.use('/api', productosRouter);
 app.use('/api', carritoRouter);
 

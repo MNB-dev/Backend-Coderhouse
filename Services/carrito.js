@@ -36,14 +36,20 @@ class Contenedor {
     }
   }
 
+  async getProducto(id) {
+    const productos = require("../Services/productos");
+    const prod = await productos.getProductoByID(id);
+    return prod;
+  }
+
   async update(id, body) {
     try {
       let data = await fs.promises.readFile(url, "utf-8");
       data = JSON.parse(data);
-      let product = data.filter((element) => {
+      let product = data.filter(async (element) => {
         if (element.id == id) {
-          body.id = element.productos.length + 1;
-          element.productos.push(body);
+          const producto = await this.getProducto(body.id);
+          if (!producto.error) element.productos.push(producto[0]);
         }
 
         return element;
