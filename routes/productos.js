@@ -4,8 +4,28 @@ const router = express.Router();
 
 router.get("/productos", productos.getProducts);
 router.get("/productos/:id", productos.getProducts);
-router.post("/productos", productos.create);
-router.put("/productos/:id", productos.update);
-router.delete("/productos/:id", productos.delete);
+
+//Solo admin
+router.post(
+  "/productos",
+  (req, res, next) => {
+    req.app.validateUser(req, res, next);
+  },
+  productos.create
+);
+router.put(
+  "/productos/:id",
+  (req, res, next) => {
+    req.app.validateUser(req, res, next);
+  },
+  productos.update
+);
+router.delete(
+  "/productos/:id",
+  (req, res, next) => {
+    req.app.validateUser(req, res, next);
+  },
+  productos.delete
+);
 
 module.exports = router;

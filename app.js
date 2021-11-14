@@ -4,6 +4,10 @@ const path = require('path');
 const productosRouter = require('./routes/productos');
 const carritoRouter = require('./routes/carrito');
 const indexRouter = require('./routes/index');
+const toBoolean = require('to-boolean');
+const dotenv = require('dotenv');
+dotenv.config();
+const admin = toBoolean(process.env.ADMIN);
 
 const app = express();
 
@@ -31,6 +35,17 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.json({ error: true, message: err.message });
 });
+
+
+function validateUser(req, res, next) {
+    if (!admin) {
+      res.json({ status: 401, message: "No está autorizado." });
+    } else {
+      console.log("Autorizado");
+      next();
+    }
+}
+app.validateUser = validateUser;
 
 app.listen(8080)
 
