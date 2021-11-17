@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { hasUncaughtExceptionCaptureCallback } = require("process");
 const url = "./public/carrito.txt";
 
 class Contenedor {
@@ -15,7 +16,7 @@ class Contenedor {
 
       return object;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -32,35 +33,36 @@ class Contenedor {
 
       return product;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
   async getProducto(id) {
-    const productos = require("../Services/productos");
-    const prod = await productos.getProductoByID(id);
-    return prod;
+    try {
+      const productos = require("../Services/productos");
+      const prod = await productos.getProductoByID(id);
+      
+      if(prod.error) throw "El producto no existe";
+
+      return prod[0];
+    } catch (error) {
+      throw error;
+    }
   }
 
   async update(id, body) {
     try {
-      let data = await fs.promises.readFile(url, "utf-8");
-      data = JSON.parse(data);
-      let product = data.filter(async (element) => {
-        if (element.id == id) {
-          const producto = await this.getProducto(body.id);
-          if (!producto.error) element.productos.push(producto[0]);
-        }
-
-        return element;
-      });
+      const data = await fs.promises.readFile(url, "utf-8");
+      const producto = await this.getProducto(body.id);
+      let carrito = await JSON.parse(data).filter(carrito => carrito.id == id);
+      carrito[0].productos.push(producto);
 
       await this.deleteById(id);
-      await this.save(product[id - 1]);
+      await this.save(carrito[0]);
 
-      return product[id - 1];
+      return carrito[0];
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -69,7 +71,7 @@ class Contenedor {
       const data = await fs.promises.readFile(url, "utf-8");
       return JSON.parse(data);
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -84,7 +86,7 @@ class Contenedor {
 
       await fs.promises.writeFile(url, JSON.stringify(data, null, 2));
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -103,7 +105,7 @@ class Contenedor {
 
       await fs.promises.writeFile(url, JSON.stringify(data, null, 2));
     } catch (error) {
-      console.log(error);
+     throw error;
     }
   }
 }
