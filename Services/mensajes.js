@@ -12,7 +12,6 @@ const sql = new ClienteSql({
 module.exports = {
     create: async (msg) => {
       try { 
-        console.log(msg);
         await sql.insertarMensajes(msg);
 
         console.log("Se guardó el mensaje");
