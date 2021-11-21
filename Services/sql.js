@@ -10,11 +10,27 @@ class ClienteSql {
       .finally(() => {
         return this.knex.schema.createTable('articulos', table => {
             table.increments('id').primary();
-            table.string('name', 50).notNullable();
+            table.string('titulo', 50).notNullable();
             table.float('price');
             table.string('thumbnail');
         })
       })
+  }
+
+  crearTabla3() {
+    return this.knex.schema.dropTableIfExists('mensajes')
+      .finally(() => {
+        return this.knex.schema.createTable('mensajes', table => {
+            table.increments('id').primary();
+            table.string('mail');
+            table.string('mensaje');
+            table.string('hora');
+        })
+      })
+  }
+
+  insertarMensajes(mensajes) {
+    return this.knex('mensajes').insert(mensajes);
   }
 
   insertarArticulos(articulos) {
@@ -35,7 +51,7 @@ class ClienteSql {
 
   actualizarProducto(body, id) {
     return this.knex.from('articulos').where('id', id).update({
-        name: body.name,
+        titulo: body.titulo,
         price: body.price,
         thumbnail: body.thumbnail,
     })

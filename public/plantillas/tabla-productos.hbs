@@ -1,0 +1,32 @@
+<style>
+  .table td, .table th { vertical-align: middle; }
+</style>
+
+{{#if productos.length}}
+<h2>Lista de Personas</h2>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Titulo</th>
+        <th scope="col">Precio</th>
+        <th scope="col">Thumbnail</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {{#each productos}}
+        <tr>
+          <th scope="row">{{id}}</th>
+          <td [href]="{i.url}">{{titulo}}</td>
+          <td>{{price}}</td>
+          <td>{{thumbnail}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+{{else}}
+  <h2 class="m-3">No hay productos.</h2>
+{{/if}}

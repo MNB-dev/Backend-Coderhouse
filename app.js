@@ -2,17 +2,14 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const productosRouter = require('./routes/productos');
-const productos3Router = require('./routes/productos3');
 const toBoolean = require('to-boolean');
 const dotenv = require('dotenv');
 dotenv.config();
 const admin = toBoolean(process.env.ADMIN);
 const { options } = require('./Services/options/mysql');
-
 const ClienteSql = require('./Services/sql');
 
 const sql = new ClienteSql(options);
-
 const sql3 = new ClienteSql({
   client: "sqlite3",
   connection: {
@@ -21,18 +18,62 @@ const sql3 = new ClienteSql({
   useNullAsDefault: true
 });
 
+const indexRouter = require("./routes/index");
+const hb = require("express-handlebars");
+const { Server: HttpServer } = require("http");
+const { Server: IOServer } = require("socket.io");
+const productosService = require("./Services/productos-bd");
+const msgService = require("./Services/mensajes");
+const PORT = 8080;
+const productos = [];
+const mensajes = [];
 
 const app = express();
+const httpServer = new HttpServer(app);
+const io = new IOServer(httpServer);
+
+//--------------------------------------------
+// configuro el socket
+
+io.on("connection", async (socket) => {
+  console.log('Nuevo cliente conectado!');
+
+  socket.emit("productos", productos);
+  socket.on("update", (producto) => {
+    productos.push(producto);
+    productosService.create(producto);
+    io.sockets.emit("productos", productos);
+  });
+
+  socket.emit("mensajes", mensajes);
+  socket.on("update-persona", (data) => {
+    mensajes.push(data);
+    msgService.create(mensajes);
+    io.sockets.emit("mensajes", mensajes);
+  });
+});
+
+//--------------------------------------------
+
+app.engine(
+  "hbs",
+  hb({
+    extname: ".hbs",
+    defaultLayout: "index.hbs",
+    layoutsDir: __dirname + "/views/layout",
+    partialsDir: __dirname + "/views/partials/",
+  })
+);
 
 // view engine setup
-/*app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');*/
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "hbs");
+app.use(express.static("public"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-//app.use('/', indexRouter);
+app.use("/", indexRouter);
 app.use('/api', productosRouter);
-app.use('/api3', productos3Router);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -63,9 +104,16 @@ function validateUser(req, res, next) {
 }
 app.validateUser = validateUser;
 
-app.listen(8080, async () => {
+const connectedServer = httpServer.listen(PORT, async () => {
   await sql.crearTabla();
-  await sql3.crearTabla();
-})
+  await sql3.crearTabla3();
+  console.log(
+    `Servidor http escuchando en el puerto ${connectedServer.address().port}`
+  );
+});
+
+connectedServer.on("error", (error) =>
+  console.log(`Error en servidor ${error}`)
+);
 
 module.exports = app;

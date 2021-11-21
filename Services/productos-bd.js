@@ -43,17 +43,17 @@ module.exports = {
   create: async (req, res, next) => {
     try {
       const producto = {
-        name: req.body.name,
-        price: req.body.price,
-        thumbnail: req.body.thumbnail,
+        titulo: req.body ? req.body.titulo : req.titulo,
+        price: req.body ? req.body.price : req.price,
+        thumbnail: req.body ? req.body.thumbnail : req.thumbnail,
       };
-
+      
       await sql.insertarArticulos(producto);
 
-      res.json("El producto fue agregado.");
+      if (req.body) res.json("El producto fue agregado.");
+      else console.log("El producto fue agregado.");
     } catch (e) {
       console.log(e);
-      next(e);
     }
   },
 };
