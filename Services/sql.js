@@ -11,12 +11,8 @@ class ClienteSql {
         return this.knex.schema.createTable('articulos', table => {
             table.increments('id').primary();
             table.string('name', 50).notNullable();
-            table.string('code', 10).notNullable();
             table.float('price');
-            table.integer('stock');
-            table.string('description');
-            table.string('picture');
-            table.string('timestamp');
+            table.string('thumbnail');
         })
       })
   }
@@ -41,11 +37,7 @@ class ClienteSql {
     return this.knex.from('articulos').where('id', id).update({
         name: body.name,
         price: body.price,
-        description: body.description,
-        code: body.code,
-        picture: body.picture,
-        stock: body.stock,
-        timestamp: Date.now()
+        thumbnail: body.thumbnail,
     })
   }
 

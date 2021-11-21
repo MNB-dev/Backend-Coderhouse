@@ -45,11 +45,7 @@ module.exports = {
       const producto = {
         name: req.body.name,
         price: req.body.price,
-        description: req.body.description,
-        code: req.body.code,
-        picture: req.body.picture,
-        stock: req.body.stock,
-        timestamp: Date.now()
+        thumbnail: req.body.thumbnail,
       };
 
       await sql.insertarArticulos(producto);
