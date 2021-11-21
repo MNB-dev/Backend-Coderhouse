@@ -1,9 +1,9 @@
 const express = require("express");
-const productos = require("../Services/productos");
+const productos = require("../Services/productos-bd");
 const router = express.Router();
 
 router.get("/productos", productos.getProducts);
-router.get("/productos/:id", productos.getProducts);
+router.get("/productos/:id", productos.getProductoByID);
 
 //Solo admin
 router.post(

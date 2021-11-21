@@ -8,6 +8,10 @@ const toBoolean = require('to-boolean');
 const dotenv = require('dotenv');
 dotenv.config();
 const admin = toBoolean(process.env.ADMIN);
+const { options } = require('./Services/options/mysql');
+const ClienteSql = require('./Services/sql');
+
+const sql = new ClienteSql(options);
 
 const app = express();
 
@@ -47,6 +51,8 @@ function validateUser(req, res, next) {
 }
 app.validateUser = validateUser;
 
-app.listen(8080)
+app.listen(8080, async () => {
+  await sql.crearTabla();
+})
 
 module.exports = app;
