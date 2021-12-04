@@ -1,12 +1,11 @@
-import mongoose from '../bin/mongodb.js';
+import mongoose from "../../bin/mongodb.js";
+import ContenedorMongoDb from "../Productos/ServiceProductoMongDb.js";
 
 const carritoSchema = new mongoose.Schema({
   timestamp: {
-    type: Date
+    type: Date,
   },
-  productos: {
-    type: []
-  }
+  productos: [{ producto: String }],
 });
 
 const carritoModel = mongoose.model("carrito", carritoSchema);
@@ -16,8 +15,19 @@ class ContenedorCarritoMongoDb {
 
   async getProducts(id) {
     try {
+      const contenedorProductos = new ContenedorMongoDb();
       const carrito = await carritoModel.findById(id);
-      return carrito[0].productos;
+      let productos = [];
+
+      if (!carrito) return "El carrito no existe.";
+
+      for (let index = 0; index < carrito.productos.length; index++) {
+        const element = carrito.productos[index];
+        const p = await contenedorProductos.getById(element.producto);
+        productos.push(p);
+      }
+
+      return productos; 
     } catch (e) {
       throw new Error(e);
     }
@@ -25,20 +35,35 @@ class ContenedorCarritoMongoDb {
 
   async addProducto(id, id_prod) {
     try {
-      const carrito = await contenedor.update( {_id: id}, { $pullAll: {_id: [id_prod] } } )
-      res.json(carrito);
+      const contenedorProductos = new ContenedorMongoDb();
+      const p = await contenedorProductos.getById(id_prod); //chequear que el prod existe
+
+      if (!p) return "El producto no existe.";
+
+      const carrito = await carritoModel.findByIdAndUpdate(id, {
+        $push: { productos: { producto: id_prod } },
+      });
+
+      if (!carrito) return "El carrito no existe.";
+
+      return;
     } catch (e) {
-      console.log(e);
-      next(e);
+        throw new Error(e);
     }
   }
 
   async deleteProducto(id, id_prod) {
     try {
-      await contenedor.updateOne( {_id: id}, { $pullAll: {_id: [id_prod] } } )
-      res.json("Producto eliminado del carrito.");
+      const carrito = await carritoModel.findByIdAndUpdate(
+        id,
+        { $pull: { productos: { producto: id_prod } } }
+      );
+
+      if (!carrito) return "El producto no existe.";
+
+      return "Producto eliminado del carrito.";
     } catch (e) {
-      next(e);
+        throw new Error(e);
     }
   }
 
@@ -46,20 +71,22 @@ class ContenedorCarritoMongoDb {
     try {
       const carrito = new carritoModel({
         timestamp: Date.now(),
-        productos: []
+        productos: [],
       });
 
-      const c = await producto.save(carrito);
-      return `Se creó un carrito con id: ${c.id}`
+      const c = await carrito.save(carrito);
+      return `Se creó un carrito con id: ${c.id}`;
     } catch (e) {
-      console.log(e);
       throw new Error(e);
     }
   }
 
   async delete(id) {
-    try {  
-      await carritoModel.deleteOne({ _id: id});
+    try {
+      const c = await carritoModel.deleteOne({ _id: id });
+
+      if (c.deletedCount == 0) return "El producto no existe.";
+
       return "Carrito eliminado";
     } catch (e) {
       throw new Error(e);

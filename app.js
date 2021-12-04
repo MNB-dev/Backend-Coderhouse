@@ -2,7 +2,7 @@ import express from 'express'
 import createError from 'http-errors';
 //import path from 'path';
 import { productosRouter } from './routes/productos.js'
-//import carritoRouter from './routes/carrito.js';
+import { carritoRouter } from './routes/carrito.js';
 //const indexRouter = require('./routes/index');
 import toBoolean from 'to-boolean';
 import dotenv from 'dotenv';
@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 //app.use('/', indexRouter);
 app.use('/api', productosRouter);
-//app.use('/api', carritoRouter);
+app.use('/api', carritoRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

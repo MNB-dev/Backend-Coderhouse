@@ -1,7 +1,6 @@
-import ContenedorCarritoMongoDb from "../../services/Carrito/ContenedorCarritoMongDb.js"
+import ContenedorCarritoMongoDb from "../../services/Carrito/ContenedorCarritoMongoDb.js"
 
 class CarritoDaoMongoDb extends ContenedorCarritoMongoDb {
-
     constructor() {
         super();
     }

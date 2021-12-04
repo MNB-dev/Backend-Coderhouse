@@ -5,8 +5,6 @@ dotenv.config();
 
 let productosDao
 
-console.log("service: " + process.env.SERVICE)
-
 switch (process.env.SERVICE) {
     case 'json':
         const { default: ProductosDaoArchivo } = await import('./Productos/ProductosDaoArchivo.js')

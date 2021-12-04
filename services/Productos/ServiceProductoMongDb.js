@@ -51,7 +51,7 @@ class ContenedorMongoDb {
 
       return producto;
     } catch (e) {
-      throw new Error(e);
+      return null;
     }
   }
 
@@ -69,7 +69,6 @@ class ContenedorMongoDb {
 
       return await producto.save(producto);
     } catch (e) {
-      console.log(e);
       throw new Error(e);
     }
   }

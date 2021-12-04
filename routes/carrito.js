@@ -1,30 +1,59 @@
 import { Router } from "express";
 import { carritoDao } from "../dao/index-carrito.js";
 
-const router = Router();
+const carritoRouter = Router();
 
-router.get("/carrito/:id/productos", async (req, res) => {
-  const productos = await carritoDao.getProducts(req.params.id);
-  res.json(productos);
+carritoRouter.get("/carrito/:id/productos", async (req, res) => {
+  try {
+    const carrito = await carritoDao.getProducts(req.params.id);
+    res.json(carrito);
+  } catch (error) {
+    res.json(error);
+  }
 });
-router.post("/carrito", async (req, res) => {
-  const productos = await carritoDao.createCarrito();
-  res.json(productos);
+carritoRouter.post("/carrito", async (req, res) => {
+  try {
+    const carrito = await carritoDao.createCarrito();
+    res.json(carrito);
+  } catch (error) {
+    res.json(error);
+  }
 });
-router.post("/carrito/:id/productos", async (req, res) => {
-  const productos = await carritoDao.addProducto(req.params.id, req.body.id);
-  res.json(productos);
-});
-router.delete("/carrito/:id", async (req, res) => {
-  const productos = await carritoDao.delete(req.params.id);
-  res.json(productos);
-});
-router.delete("/carrito/:id/productos/:id_prod", async (req, res) => {
-  const productos = await carritoDao.carrito.deleteProducto(
-    req.params.id,
-    req.body.id
-  );
-  res.json(productos);
+carritoRouter.post("/carrito/:id/productos", async (req, res) => {
+  try {
+    const agregado = await carritoDao.addProducto(req.params.id, req.body.id);
+    
+    if (agregado) {
+      res.json(agregado)
+    }
+    else {
+      const carrito = await carritoDao.getProducts(req.params.id);
+      res.json(carrito);
+    }
+  } catch (error) {
+    res.json(error);
+  }
 });
 
-export default { router };
+carritoRouter.delete("/carrito/:id", async (req, res) => {
+  try {
+    const carrito = await carritoDao.delete(req.params.id);
+    res.json(carrito);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+carritoRouter.delete("/carrito/:id/productos/:id_prod", async (req, res) => {
+  try {
+    const carrito = await carritoDao.deleteProducto(
+      req.params.id,
+      req.params.id_prod
+    );
+    res.json(carrito);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+export { carritoRouter };
