@@ -1,11 +1,12 @@
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
-const productosRouter = require('./routes/productos');
-const carritoRouter = require('./routes/carrito');
-const indexRouter = require('./routes/index');
-const toBoolean = require('to-boolean');
-const dotenv = require('dotenv');
+import express from 'express'
+import createError from 'http-errors';
+//import path from 'path';
+import { productosRouter } from './routes/productos.js'
+//import carritoRouter from './routes/carrito.js';
+//const indexRouter = require('./routes/index');
+import toBoolean from 'to-boolean';
+import dotenv from 'dotenv';
+
 dotenv.config();
 const admin = toBoolean(process.env.ADMIN);
 
@@ -19,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 //app.use('/', indexRouter);
 app.use('/api', productosRouter);
-app.use('/api', carritoRouter);
+//app.use('/api', carritoRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -49,4 +50,4 @@ app.validateUser = validateUser;
 
 app.listen(8080)
 
-module.exports = app;
+export { app };

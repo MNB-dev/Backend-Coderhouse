@@ -39,7 +39,7 @@ class Contenedor {
 
   async getProducto(id) {
     try {
-      const productos = require("../Services/productos");
+      const productos = require("./ServiceProductoArchivo");
       const prod = await productos.getProductoByID(id);
       
       if(prod.error) throw "El producto no existe";

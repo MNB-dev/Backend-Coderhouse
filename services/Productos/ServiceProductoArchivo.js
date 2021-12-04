@@ -98,7 +98,7 @@ class Contenedor {
 }
 
 module.exports = {
-  getProducts: async (req, res, next) => {
+  getAll: async (req, res, next) => {
     try {
       const contenedor = new Contenedor();
       const producto = req.params.id ? await contenedor.getById(req.params.id) : await contenedor.getAll();
@@ -108,7 +108,7 @@ module.exports = {
       next(e);
     }
   },
-  getProductoByID: async (id) => {
+  getByID: async (id) => {
     try {
       const contenedor = new Contenedor();
       const producto = await contenedor.getById(id);
