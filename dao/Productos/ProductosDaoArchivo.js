@@ -1,9 +1,8 @@
-import ContenedorArchivo from "../../services/Productos/ServiceProductoArchivo"
+import ContenedorProductoArchivo from "../../services/Productos/ContenedorProductoArchivo"
 
-class ProductosDaoArchivo extends ContenedorArchivo {
+class ProductosDaoArchivo extends ContenedorProductoArchivo {
 
-    constructor(rutaDir) {
-        super(`${rutaDir}/productos.json`)
+    constructor() {
     }
 }
 

@@ -9,7 +9,8 @@ console.log("service: " + process.env.SERVICE)
 
 switch (process.env.SERVICE) {
     case 'json':
-        console.log("hola json");
+        const { default: CarritoDaoArchivo } = await import('./carrito/carritoDaoArchivo.js')
+        carritoDao = new CarritoDaoArchivo();
         break
     case 'firebase':
         //const { default: carritoDaoFirebase } = await import('./carritoDaoFirebase.js')

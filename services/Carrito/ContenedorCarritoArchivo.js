@@ -1,5 +1,4 @@
-const fs = require("fs");
-const { hasUncaughtExceptionCaptureCallback } = require("process");
+import fs from "fs";
 const url = "./public/carrito.txt";
 
 class Contenedor {
@@ -110,46 +109,48 @@ class Contenedor {
   }
 }
 
-module.exports = {
-  getProducts: async (req, res, next) => {
+class ContenedorCarritoArchivo {
+  async getProducts(id) {
     try {
       const contenedor = new Contenedor();
-      const carrito = await contenedor.getById(req.params.id);
-      res.json(carrito[0].productos);
+      const carrito = await contenedor.getById(id);
+      return carrito[0].productos;
     } catch (e) {
-      console.log(e);
-      next(e);
+      throw new Error(e);
     }
-  },
-  deleteProducto: async (req, res, next) => {
+  }
+
+  async deleteProducto(id, id_prod){
     try {
       const contenedor = new Contenedor();
-      await contenedor.deleteProductoById(req.params.id, req.params.id_prod);
-      res.json("Producto eliminado del carrito.");
+      await contenedor.deleteProductoById(id, id_prod);
+      return "Producto eliminado del carrito.";
     } catch (e) {
-      next(e);
+      throw new Error(e);
     }
-  },
-  delete: async (req, res, next) => {
+  }
+
+  async delete (id){
     try {
       const contenedor = new Contenedor();
-      await contenedor.deleteById(req.params.id);
-      res.json("Carrito eliminado.");
+      await contenedor.deleteById(id);
+      return"Carrito eliminado.";
     } catch (e) {
-      next(e);
+      throw new Error(e);
     }
-  },
-  addProducto: async (req, res, next) => {
+  }
+
+  async addProducto(id, id_prod) {
     try {
       const contenedor = new Contenedor();
-      const carrito = await contenedor.update(req.params.id, req.body);
-      res.json(carrito);
+      const carrito = await contenedor.update(id, id_prod);
+      return carrito;
     } catch (e) {
-      console.log(e);
-      next(e);
+      throw new Error(e);
     }
-  },
-  createCarrito: async (req, res, next) => {
+  }
+
+  async createCarrito() {
     try {
       const contenedor = new Contenedor();
       const carrito = await contenedor.save({
@@ -157,10 +158,11 @@ module.exports = {
         productos: [],
       });
 
-      res.json(`Se creó un carrito con id: ${carrito.id}`);
+      return `Se creó un carrito con id: ${carrito.id}`;
     } catch (e) {
-      console.log(e);
-      next(e);
+      throw new Error(e);
     }
-  },
+  }
 };
+
+export default ContenedorCarritoArchivo;

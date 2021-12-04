@@ -97,64 +97,68 @@ class Contenedor {
   }
 }
 
-module.exports = {
-  getAll: async (req, res, next) => {
+class ContenedorProductoArchivo {
+  async getAll(id) {
     try {
       const contenedor = new Contenedor();
-      const producto = req.params.id ? await contenedor.getById(req.params.id) : await contenedor.getAll();
-      res.json(producto);
+      const producto = id ? await contenedor.getById(id) : await contenedor.getAll();
+      return producto;
     } catch (e) {
-      console.log(e);
-      next(e);
+      throw new Error(e);
     }
-  },
-  getByID: async (id) => {
+  }
+
+  async getByID(id) {
     try {
       const contenedor = new Contenedor();
       const producto = await contenedor.getById(id);
       return producto;
     } catch (e) {
-      console.log(e);
+      throw new Error(e);
     }
-  },
-  update: async (req, res, next) => {
+  }
+
+  async update(id, body) {
     try {
       const contenedor = new Contenedor();
       const producto = await contenedor.update(
-        req.params.id,
-        req.body
+        id,
+        body
       );
-      res.json(producto);
+      return producto;
     } catch (e) {
-      next(e);
+      throw new Error(e);
     }
-  },
-  delete: async (req, res, next) => {
+  }
+
+  async delete(id) {
     try {
       const contenedor = new Contenedor();
-      await contenedor.deleteById(req.params.id);
-      res.json("Producto eliminado.");
+      await contenedor.deleteById(id);
+      return "Producto eliminado.";
     } catch (e) {
-      next(e);
+      throw new Error(e);
     }
-  },
-  create: async (req, res, next) => {
+  }
+
+  async create(body) {
     try {
       const contenedor = new Contenedor();
       await contenedor.save({
-        name: req.body.name,
-        price: req.body.price,
-        description: req.body.description,
-        code: req.body.code,
-        picture: req.body.picture,
-        stock: req.body.stock,
+        name: body.name,
+        price: body.price,
+        description: body.description,
+        code: body.code,
+        picture: body.picture,
+        stock: body.stock,
         timestamp: Date.now()
       });
 
-      res.json("El producto fue agregado.");
+      return "El producto fue agregado.";
     } catch (e) {
-      console.log(e);
-      next(e);
+      throw new Error(e);
     }
-  },
+  }
 };
+
+export default ContenedorProductoArchivo;
