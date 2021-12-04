@@ -46,8 +46,9 @@ class ContenedorMongoDb {
   async getById(id) {
     try {
       const producto = await productosModel.findById(id);
-      console.log(id)
-      console.log(producto);
+
+      if(!producto) return "El producto no existe."
+
       return producto;
     } catch (e) {
       throw new Error(e);
@@ -75,11 +76,14 @@ class ContenedorMongoDb {
 
   async update(id, body) {
     try {
-      await productosModel.updateOne(
+      const producto = await productosModel.updateOne(
         { _id: id },
         body
       );
-      return "Producto modificado";
+
+      if (producto.modifiedCount == 0) return "El producto no tiene ninguna modificación o no existe."
+      
+      return;
     } catch (e) {
       throw new Error(e);
     }
@@ -88,6 +92,9 @@ class ContenedorMongoDb {
   async delete(id) {
     try {
       const producto = await productosModel.deleteOne({ _id: id});
+
+      if (producto.deletedCount == 0) return "El producto no existe."
+
       return "Producto eliminado";
     } catch (e) {
       throw new Error(e);

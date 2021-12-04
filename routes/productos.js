@@ -35,7 +35,8 @@ productosRouter.put(
   },
   async (req, res, next) => {
     try {
-      const producto = await productosDao.update(req.params.id, req.body);
+      await productosDao.update(req.params.id, req.body);
+      const producto = await productosDao.getById(req.params.id);
       res.json(producto);
     } catch (error) {
       res.json(error);
