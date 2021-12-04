@@ -36,7 +36,7 @@ class ContenedorCarritoMongoDb {
   async addProducto(id, id_prod) {
     try {
       const contenedorProductos = new ContenedorMongoDb();
-      const p = await contenedorProductos.getById(id_prod); //chequear que el prod existe
+      const p = await contenedorProductos.getById(id_prod); 
 
       if (!p) return "El producto no existe.";
 
@@ -58,8 +58,6 @@ class ContenedorCarritoMongoDb {
         id,
         { $pull: { productos: { producto: id_prod } } }
       );
-
-      if (!carrito) return "El producto no existe.";
 
       return "Producto eliminado del carrito.";
     } catch (e) {
