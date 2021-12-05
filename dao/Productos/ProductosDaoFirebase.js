@@ -1,9 +1,9 @@
-//import ContenedorArchivo from "../../contenedores/ContenedorFirebase.js"
+import ContenedorProductoFirebase from "../../services/Productos/ContenedorProductoFirebase.js";
 
-class ProductosDaoFirebase {
+class ProductosDaoFirebase extends ContenedorProductoFirebase {
 
-    constructor(rutaDir) {
-        super(`${rutaDir}/personas.json`)
+    constructor(db) {
+        super(db)
     }
 }
 

@@ -1,4 +1,4 @@
-import mongoose from '../../bin/mongodb.js';
+import mongoose from '../../db/mongodb.js';
 
 const productosSchema = new mongoose.Schema({
   name: {

@@ -1,22 +1,19 @@
-import mongoose from "../../db/mongodb.js";
-import ContenedorMongoDb from "../Productos/ServiceProductoMongDb.js";
+import ContenedorProductoFirebase from '../Productos/ContenedorProductoFirebase.js';
+import admin from 'firebase-admin';
+import { initializeApp } from "firebase-admin/app";
 
-const carritoSchema = new mongoose.Schema({
-  timestamp: {
-    type: Date,
-  },
-  productos: [{ producto: String }],
-});
-
-const carritoModel = mongoose.model("carrito", carritoSchema);
-
-class ContenedorCarritoMongoDb {
-  constructor() {}
+class ContenedorCarritoFirebase {
+  constructor(db) {
+    this.query = db.collection('carrito');
+  }
 
   async getProducts(id) {
     try {
       const contenedorProductos = new ContenedorMongoDb();
-      const carrito = await carritoModel.findById(id);
+      const carritoSnapshot = await this.query.get();
+      const docsSnapshot = carritoSnapshot.docs;
+      const carrito = docsSnapshot.find(a => a.id == id);
+      
       let productos = [];
 
       if (!carrito) return "El carrito no existe.";
@@ -29,13 +26,14 @@ class ContenedorCarritoMongoDb {
 
       return productos; 
     } catch (e) {
+      console.log(e);
       throw new Error(e);
     }
   }
 
   async addProducto(id, id_prod) {
     try {
-      const contenedorProductos = new ContenedorMongoDb();
+      const contenedorProductos = new ContenedorProductoFirebase();
       const p = await contenedorProductos.getById(id_prod); 
 
       if (!p) return "El producto no existe.";
@@ -48,6 +46,7 @@ class ContenedorCarritoMongoDb {
 
       return;
     } catch (e) {
+      console.log(e);
         throw new Error(e);
     }
   }
@@ -61,20 +60,20 @@ class ContenedorCarritoMongoDb {
 
       return "Producto eliminado del carrito.";
     } catch (e) {
+      console.log(e);
         throw new Error(e);
     }
   }
 
   async createCarrito() {
     try {
-      const carrito = new carritoModel({
+      const c = await this.query.add({
         timestamp: Date.now(),
         productos: [],
       });
-
-      const c = await carrito.save(carrito);
       return `Se creó un carrito con id: ${c.id}`;
     } catch (e) {
+      console.log(e);
       throw new Error(e);
     }
   }
@@ -87,9 +86,10 @@ class ContenedorCarritoMongoDb {
 
       return "Carrito eliminado";
     } catch (e) {
+      console.log(e);
       throw new Error(e);
     }
   }
 }
 
-export default ContenedorCarritoMongoDb;
+export default ContenedorCarritoFirebase;

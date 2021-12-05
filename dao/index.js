@@ -1,4 +1,4 @@
-//import config from '../../config.js'
+import config from '../config.js'
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -13,9 +13,11 @@ switch (process.env.SERVICE) {
         carritoDao = new CarritoDaoArchivo();
         break
     case 'firebase':
-        //const { default: ProductosDaoFirebase } = await import('./ProductosDaoFirebase.js')
-        //ProductosDao = new ProductosDaoFirebase()
-        console.log("hola firebase");
+        const { db } = await import('../db/firebase-db.js');
+        const { default: ProductosDaoFirebase } = await import('./Productos/ProductosDaoFirebase.js')
+        productosDao = new ProductosDaoFirebase(db);
+        const { default: carritoDaoFirebase } = await import('./carrito/CarritoDaoFirebase.js')
+        carritoDao = new carritoDaoFirebase(db);
         break
     case 'mongodb':
         const { default: ProductosDaoMongoDb } = await import('./Productos/ProductosDaoMongoDb.js')
