@@ -1,4 +1,5 @@
 import fs from "fs";
+import ContenedorProductoArchivo from '../Productos/ContenedorProductoArchivo.js';
 const url = "./public/carrito.txt";
 
 class Contenedor {
@@ -38,23 +39,29 @@ class Contenedor {
 
   async getProducto(id) {
     try {
-      const productos = require("./ServiceProductoArchivo");
-      const prod = await productos.getProductoByID(id);
+      const contenedor = new ContenedorProductoArchivo();
+      const prod = await contenedor.getByID(id);
       
-      if(prod.error) throw "El producto no existe";
+      if(prod.error) return null;
 
       return prod[0];
     } catch (error) {
-      throw error;
+      return null
     }
   }
 
-  async update(id, body) {
+  async update(id, id_prod) {
     try {
       const data = await fs.promises.readFile(url, "utf-8");
-      const producto = await this.getProducto(body.id);
+      const producto = await this.getProducto(id_prod);
+
+      if(!producto) return 'El producto no existe'
+
       let carrito = await JSON.parse(data).filter(carrito => carrito.id == id);
-      carrito[0].productos.push(producto);
+
+      if (carrito.length == 0) return null;
+
+      carrito[0].productos.push(producto.id);
 
       await this.deleteById(id);
       await this.save(carrito[0]);
@@ -114,7 +121,16 @@ class ContenedorCarritoArchivo {
     try {
       const contenedor = new Contenedor();
       const carrito = await contenedor.getById(id);
-      return carrito[0].productos;
+      let productos = [];
+      
+      if (!carrito) return "El carrito no existe.";
+
+      for (let index = 0; index < carrito[0].productos.length; index++) {
+        const p = await contenedor.getProducto(carrito[0].productos[index]);
+        productos.push(p);
+      }
+
+      return productos; 
     } catch (e) {
       throw new Error(e);
     }
@@ -144,7 +160,10 @@ class ContenedorCarritoArchivo {
     try {
       const contenedor = new Contenedor();
       const carrito = await contenedor.update(id, id_prod);
-      return carrito;
+
+      if (!carrito) return "El carrito no existe.";
+
+      return;
     } catch (e) {
       throw new Error(e);
     }

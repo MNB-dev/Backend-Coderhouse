@@ -1,8 +1,9 @@
-import ContenedorProductoArchivo from "../../services/Productos/ContenedorProductoArchivo"
+import ContenedorProductoArchivo from "../../services/Productos/ContenedorProductoArchivo.js"
 
 class ProductosDaoArchivo extends ContenedorProductoArchivo {
 
     constructor() {
+        super();
     }
 }
 

@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "name": "ultimo mondojlvnlksd",
+    "price": "34",
+    "description": "body.description",
+    "code": "334213",
+    "picture": "body.picture",
+    "stock": "645",
+    "timestamp": 1638668198353,
+    "id": 3
+  },
+  {
+    "name": "testeando updafgdstfgadsfasdurhjfhfge02",
+    "price": 800,
+    "description": "tdsgbsgvsdest",
+    "code": 5,
+    "picture": "pigdafasfasdfrtc",
+    "stock": 1,
+    "timestamp": 1638668218539,
+    "id": 1
+  }
+]

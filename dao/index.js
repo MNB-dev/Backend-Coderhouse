@@ -8,7 +8,7 @@ let productosDao
 switch (process.env.SERVICE) {
     case 'json':
         const { default: ProductosDaoArchivo } = await import('./Productos/ProductosDaoArchivo.js')
-        productosDao = new ProductosDaoArchivo(config.fileSystem.path)
+        productosDao = new ProductosDaoArchivo();
         break
     case 'firebase':
         //const { default: ProductosDaoFirebase } = await import('./ProductosDaoFirebase.js')

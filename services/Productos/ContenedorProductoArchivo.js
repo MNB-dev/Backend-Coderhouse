@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 const url = "./public/productos.txt";
 
 class Contenedor {
