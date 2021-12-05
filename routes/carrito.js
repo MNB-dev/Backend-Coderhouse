@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { carritoDao } from "../dao/index-carrito.js";
+import { carritoDao } from "../dao/index.js";
 
 const carritoRouter = Router();
 
