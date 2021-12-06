@@ -24,8 +24,6 @@ class ContenedorProductoFirebase {
     try {
       const producto = await this.query.doc(id).get();
 
-      console.log(producto)
-
       if (!producto._fieldsProto) return "El producto no existe.";
 
       return asObj(producto);

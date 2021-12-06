@@ -1,26 +1,26 @@
 import ContenedorProductoFirebase from '../Productos/ContenedorProductoFirebase.js';
 import admin from 'firebase-admin';
-import { initializeApp } from "firebase-admin/app";
+
+const asObj = (doc) => ({ id: doc.id, ...doc.data() });
 
 class ContenedorCarritoFirebase {
   constructor(db) {
+    this.db = db;
     this.query = db.collection('carrito');
   }
 
   async getProducts(id) {
     try {
-      const contenedorProductos = new ContenedorMongoDb();
-      const carritoSnapshot = await this.query.get();
-      const docsSnapshot = carritoSnapshot.docs;
-      const carrito = docsSnapshot.find(a => a.id == id);
-      
+      const contenedorProductos = new ContenedorProductoFirebase(this.db);
+      let carrito = await this.query.doc(id).get();
       let productos = [];
 
-      if (!carrito) return "El carrito no existe.";
+      if (!carrito._fieldsProto) return "El carrito no existe.";
+      carrito = asObj(carrito);
 
       for (let index = 0; index < carrito.productos.length; index++) {
         const element = carrito.productos[index];
-        const p = await contenedorProductos.getById(element.producto);
+        const p = await contenedorProductos.getById(element);
         productos.push(p);
       }
 
@@ -33,17 +33,27 @@ class ContenedorCarritoFirebase {
 
   async addProducto(id, id_prod) {
     try {
-      const contenedorProductos = new ContenedorProductoFirebase();
+      const contenedorProductos = new ContenedorProductoFirebase(this.db);
       const p = await contenedorProductos.getById(id_prod); 
 
       if (!p) return "El producto no existe.";
+       const doc = await this.query.doc(id);
+      let carrito = await this.query.doc(id).get();
+      carrito = asObj(carrito);
 
-      const carrito = await carritoModel.findByIdAndUpdate(id, {
-        $push: { productos: { producto: id_prod } },
-      });
+      let productos = [id_prod];
 
-      if (!carrito) return "El carrito no existe.";
+      for (let index = 0; index < carrito.productos.length; index++) {
+        const element = carrito.productos[index];
 
+        productos.push(element);
+      }
+
+      await doc.update({
+        timestamp: new Date(),
+        productos: productos
+      }) 
+ 
       return;
     } catch (e) {
       console.log(e);
@@ -53,10 +63,10 @@ class ContenedorCarritoFirebase {
 
   async deleteProducto(id, id_prod) {
     try {
-      const carrito = await carritoModel.findByIdAndUpdate(
-        id,
-        { $pull: { productos: { producto: id_prod } } }
-      );
+      const doc = await this.query.doc(id);
+      await doc.update({
+        productos: admin.firestore.FieldValue.arrayRemove(id_prod)
+      });
 
       return "Producto eliminado del carrito.";
     } catch (e) {
@@ -80,9 +90,8 @@ class ContenedorCarritoFirebase {
 
   async delete(id) {
     try {
-      const c = await carritoModel.deleteOne({ _id: id });
-
-      if (c.deletedCount == 0) return "El producto no existe.";
+      const doc = await this.query.doc(id);
+      await doc.delete();
 
       return "Carrito eliminado";
     } catch (e) {
