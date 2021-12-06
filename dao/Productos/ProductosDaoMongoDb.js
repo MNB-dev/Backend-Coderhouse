@@ -1,6 +1,6 @@
-import ContenedorMongoDb from "../../services/Productos/ServiceProductoMongDb.js"
+import ContenedorProudctoMongoDb from "../../services/Productos/ContenedorProudctoMongoDb.js"
 
-class ProductosDaoMongoDb extends ContenedorMongoDb {
+class ProductosDaoMongoDb extends ContenedorProudctoMongoDb {
 
     constructor() {
         super();

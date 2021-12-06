@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import config from '../config.js'
 
-mongoose.connect('mongodb://localhost/coderhouseTP', { useNewUrlParser: true }, function (error) {
+mongoose.connect(config.mongo.local.url, { useNewUrlParser: true }, function (error) {
     if (error) {
         throw error;
     } else {

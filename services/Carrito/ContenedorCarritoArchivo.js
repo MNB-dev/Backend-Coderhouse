@@ -1,7 +1,10 @@
 import fs from "fs";
+import path from 'path';
+import config from '../config.js';
 import ContenedorProductoArchivo from '../Productos/ContenedorProductoArchivo.js';
-const url = "./public/carrito.txt";
 
+const __dirname = path.resolve();
+const url = __dirname + config.archivo.carritoURL;
 class Contenedor {
   constructor() {}
 

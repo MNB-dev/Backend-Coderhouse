@@ -1,5 +1,8 @@
 import fs from "fs";
-const url = "./public/productos.txt";
+import path from 'path';
+import config from '../config.js';
+const __dirname = path.resolve();
+const url = __dirname + config.archivo.productoURL;
 
 class Contenedor {
   constructor() {}

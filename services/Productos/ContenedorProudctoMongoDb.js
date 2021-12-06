@@ -1,4 +1,4 @@
-import mongoose from '../../db/mongodb.js';
+import mongoose from '../../db/mongo-db.js';
 
 const productosSchema = new mongoose.Schema({
   name: {
@@ -31,7 +31,7 @@ const productosSchema = new mongoose.Schema({
 
 const productosModel = mongoose.model("productos", productosSchema);
 
-class ContenedorMongoDb {
+class ContenedorProudctoMongoDb {
   constructor() {}
 
   async getAll() {
@@ -101,4 +101,4 @@ class ContenedorMongoDb {
   }
 }
 
-export default ContenedorMongoDb;
+export default ContenedorProudctoMongoDb;

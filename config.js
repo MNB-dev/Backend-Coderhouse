@@ -10,5 +10,14 @@ export default {
         token_uri: "https://oauth2.googleapis.com/token",
         auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
         client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-zlayw%40coderhouse-625e1.iam.gserviceaccount.com"
+    },
+    mongo: {
+        local: {
+            url: "mongodb://localhost/coderhouseTP"
+        }
+    },
+    archivo: {
+        carritoURL: "/public/carrito.txt",
+        productosURL: "/public/productos.txt"
     }
 }
