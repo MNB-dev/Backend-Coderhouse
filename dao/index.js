@@ -1,4 +1,3 @@
-import config from '../config.js'
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -26,9 +25,10 @@ switch (process.env.SERVICE) {
         carritoDao = new carritoDaoMongoDb();
         break
     default:
-        ///const { default: ProductosDaoMem } = await import('./ProductosDaoMem.js')
-        //ProductosDao = new ProductosDaoMem()
-        console.log("hola default");
+        const { default: ProductosDaoMem } = await import('./Productos/ProductosDaoMem.js')
+        productosDao = new ProductosDaoMem();
+        const { default: CarritoDaoMem } = await import('./carrito/CarritoDaoMem.js')
+        carritoDao = new CarritoDaoMem();
         break
 }
 
