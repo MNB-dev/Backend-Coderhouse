@@ -43,7 +43,7 @@ class Contenedor {
   async getProducto(id) {
     try {
       const contenedor = new ContenedorProductoArchivo();
-      const prod = await contenedor.getByID(id);
+      const prod = await contenedor.getById(id);
       
       if(prod.error) return null;
 

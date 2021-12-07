@@ -1,4 +1,3 @@
-import fs from "fs";
 import ContenedorProductoMem from "../Productos/ContenedorProductoMem.js";
 
 class ContenedorArchivoMem {
@@ -15,7 +14,7 @@ class ContenedorArchivoMem {
       if (!carrito) return "El carrito no existe.";
 
       for (let index = 0; index < carrito[0].productos.length; index++) {
-        const p = await contenedor.getByID(carrito.productos[index]);
+        const p = await contenedor.getById(carrito.productos[index]);
         productos.push(p);
       }
 
@@ -29,7 +28,12 @@ class ContenedorArchivoMem {
     try {
       const carrito = await this.productos.find((elem) => elem.id == id);
       const index = carrito.productos.findIndex((elem) => elem.id == id_prod);
-      carrito.productos.splice(index, 1)[0];
+
+      if (index == -1) {
+        throw new Error(`Error al borrar: elemento no encontrado`);
+      } else {
+        carrito.productos.splice(index, 1)[0];
+      }
 
       return "Producto eliminado del carrito.";
     } catch (e) {
@@ -62,10 +66,6 @@ class ContenedorArchivoMem {
         this.carritos.splice(index, 1)[0];
       }
 
-      const borrado = await update(carrito);
-
-      if (!borrado) return "No pudo ser eliminado.";
-
       return "Carrito eliminado.";
     } catch (e) {
       throw new Error(e);
@@ -78,7 +78,7 @@ class ContenedorArchivoMem {
       if (index == -1) {
         throw new Error(`Error al borrar: elemento no encontrado`);
       } else {
-        const p = await contenedor.getByID(id_prod);
+        const p = await contenedor.getById(id_prod);
 
         if (!p) return "El producto no existe";
 

@@ -14,7 +14,7 @@ class ContenedorProductoMem {
     }
   }
 
-  async getByID(id) {
+  async getById(id) {
     try {
       const producto = await this.productos.find((elem) => elem.id == id);
       return producto;
@@ -43,7 +43,7 @@ class ContenedorProductoMem {
         this.productos[index] = p;
       }
 
-      return p;
+      return;
     } catch (e) {
       throw new Error(e);
     }

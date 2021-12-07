@@ -111,7 +111,7 @@ class ContenedorProductoArchivo {
     }
   }
 
-  async getByID(id) {
+  async getById(id) {
     try {
       const contenedor = new Contenedor();
       const producto = await contenedor.getById(id);
