@@ -12,8 +12,12 @@ export default {
         client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-zlayw%40coderhouse-625e1.iam.gserviceaccount.com"
     },
     mongo: {
+        useLocal: false,
         local: {
             url: "mongodb://localhost/coderhouseTP"
+        },
+        compass: {
+            uri: "mongodb+srv://coderhouse:coderhouse@cluster0.8z1uy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
         }
     },
     archivo: {

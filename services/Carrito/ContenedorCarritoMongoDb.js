@@ -1,5 +1,5 @@
-import mongoose from "../../db/mongodb.js";
-import ContenedorMongoDb from "../Productos/ServiceProductoMongDb.js";
+import mongoose from "../../db/mongo-db.js";
+import ContenedorProudctoMongoDb from "../Productos/ContenedorProductoMongoDb.js";
 
 const carritoSchema = new mongoose.Schema({
   timestamp: {
@@ -15,7 +15,7 @@ class ContenedorCarritoMongoDb {
 
   async getProducts(id) {
     try {
-      const contenedorProductos = new ContenedorMongoDb();
+      const contenedorProductos = new ContenedorProudctoMongoDb();
       const carrito = await carritoModel.findById(id);
       let productos = [];
 
@@ -35,7 +35,7 @@ class ContenedorCarritoMongoDb {
 
   async addProducto(id, id_prod) {
     try {
-      const contenedorProductos = new ContenedorMongoDb();
+      const contenedorProductos = new ContenedorProudctoMongoDb();
       const p = await contenedorProductos.getById(id_prod); 
 
       if (!p) return "El producto no existe.";

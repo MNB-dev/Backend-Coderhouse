@@ -1,4 +1,4 @@
-import ContenedorProudctoMongoDb from "../../services/Productos/ContenedorProudctoMongoDb.js"
+import ContenedorProudctoMongoDb from "../../services/Productos/ContenedorProductoMongoDb.js"
 
 class ProductosDaoMongoDb extends ContenedorProudctoMongoDb {
 
