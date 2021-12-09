@@ -1,3 +1,4 @@
+
 import ContenedorProductoMariaDB from "../Productos/ContenedorProductoMariaDB.js";
 import ClienteSql from "../sql.js";
 
@@ -13,15 +14,17 @@ class ContenedorCarritoMariaDB {
       let productos = [];
 
       if (!carrito) return "El carrito no existe.";
+      const prodCarrito = JSON.parse(carrito[0].productos);
 
-      for (let index = 0; index < carrito.productos.length; index++) {
-        const element = carrito.productos[index];
+      for (let index = 0; index < prodCarrito.length; index++) {
+        const element = prodCarrito[index];
         const p = await contenedorProductos.getById(element);
         productos.push(p);
       }
 
       return productos;
     } catch (e) {
+        console.log(e);
       throw new Error(e);
     }
   }
@@ -31,24 +34,24 @@ class ContenedorCarritoMariaDB {
       const contenedorProductos = new ContenedorProductoMariaDB();
       const p = await contenedorProductos.getById(id_prod);
 
-      if (!p) return "El producto no existe.";
+      if (p == undefined) return "El producto no existe.";
 
       const carritoOriginal = await sql.obtenerPorId("carritos", id);
 
-      if (!carritoOriginal) return "El carrito no existe.";
+      if (carritoOriginal.length == 0) return "El carrito no existe.";
 
-      const productos = carritoOriginal.productos;
+      const productos = JSON.parse(carritoOriginal[0].productos);
       productos.push(id_prod);
 
       const body = {
         timestamp: Date.now(),
-        productos: productos,
+        productos: JSON.stringify(productos),
       };
 
       await sql.actualizar("carritos", id, body);
-
       return;
     } catch (e) {
+        console.log(e);
       throw new Error(e);
     }
   }
@@ -56,17 +59,20 @@ class ContenedorCarritoMariaDB {
   async deleteProducto(id, id_prod) {
     try {
       const carritoOriginal = await sql.obtenerPorId("carritos", id);
-      const productos = carritoOriginal.productos;
-      const index = producto.findIndex((elem) => elem.id == id_prod);
+
+      if (carritoOriginal.length == 0) return "El carrito no existe.";
+
+      const productos = JSON.parse(carritoOriginal[0].productos);
+      const index = productos.findIndex((elem) => parseInt(elem) == id_prod);
 
       if (index == -1) {
         throw new Error(`Error al borrar: elemento no encontrado`);
       } else {
         productos.splice(index, 1)[0];
-
+        
         const body = {
           timestamp: Date.now(),
-          productos: productos,
+          productos: JSON.stringify(productos),
         };
 
         await sql.actualizar("carritos", id, body);
@@ -74,6 +80,7 @@ class ContenedorCarritoMariaDB {
 
       return "Producto eliminado del carrito.";
     } catch (e) {
+        console.log(e);
       throw new Error(e);
     }
   }
@@ -82,12 +89,14 @@ class ContenedorCarritoMariaDB {
     try {
       const carrito = {
         timestamp: Date.now(),
-        productos: [],
+        productos: JSON.stringify([]),
       };
 
       const c = await sql.insertar('carritos', carrito);
-      return `Se creó un carrito con id: ${c.id}`;
+
+      return `Se creó un carrito con id: ${c}`;
     } catch (e) {
+        console.log(e);
       throw new Error(e);
     }
   }
@@ -96,10 +105,11 @@ class ContenedorCarritoMariaDB {
     try {
       const c = await sql.borrarPorId('carritos', id);
 
-      if (c.deletedCount == 0) return "El producto no existe.";
+      if (!c) return "El producto no existe.";
 
       return "Carrito eliminado";
     } catch (e) {
+        console.log(e);
       throw new Error(e);
     }
   }
