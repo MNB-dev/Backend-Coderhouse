@@ -29,6 +29,7 @@ class ContenedorCarritoMongoDb {
 
       return productos; 
     } catch (e) {
+      console.log(e);
       throw new Error(e);
     }
   }
@@ -48,6 +49,7 @@ class ContenedorCarritoMongoDb {
 
       return;
     } catch (e) {
+      console.log(e);
         throw new Error(e);
     }
   }
@@ -61,6 +63,7 @@ class ContenedorCarritoMongoDb {
 
       return "Producto eliminado del carrito.";
     } catch (e) {
+      console.log(e);
         throw new Error(e);
     }
   }
@@ -75,6 +78,7 @@ class ContenedorCarritoMongoDb {
       const c = await carrito.save(carrito);
       return `Se creó un carrito con id: ${c.id}`;
     } catch (e) {
+      console.log(e);
       throw new Error(e);
     }
   }
@@ -87,6 +91,7 @@ class ContenedorCarritoMongoDb {
 
       return "Carrito eliminado";
     } catch (e) {
+      console.log(e);
       throw new Error(e);
     }
   }
