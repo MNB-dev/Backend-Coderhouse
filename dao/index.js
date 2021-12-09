@@ -24,6 +24,19 @@ switch (process.env.SERVICE) {
         const { default: carritoDaoMongoDb } = await import('./carrito/carritoDaoMongoDb.js')
         carritoDao = new carritoDaoMongoDb();
         break
+    case 'sqlite3':
+        console.log("hola")
+/*         const { default: ProductosDaoMongoDb } = await import('./Productos/ProductosDaoMongoDb.js')
+        productosDao = new ProductosDaoMongoDb();
+        const { default: carritoDaoMongoDb } = await import('./carrito/carritoDaoMongoDb.js')
+        carritoDao = new carritoDaoMongoDb(); */
+        break
+    case 'mysql':
+        const { default: ProductosDaoMariaDB } = await import('./Productos/ProductosDaoMariaDB.js')
+        productosDao = new ProductosDaoMariaDB();
+        const { default: CarritoDaoMariaDB } = await import('./carrito/CarritoDaoMariaDB.js')
+        carritoDao = new CarritoDaoMariaDB();
+        break
     default:
         const { default: ProductosDaoMem } = await import('./Productos/ProductosDaoMem.js')
         productosDao = new ProductosDaoMem();

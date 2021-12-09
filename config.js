@@ -23,5 +23,21 @@ export default {
     archivo: {
         carritoURL: "/public/carrito.txt",
         productosURL: "/public/productos.txt"
+    },
+    mysql:{
+        client: 'mysql',
+        connection: {
+          host: '127.0.0.1',
+          user: 'root',
+          password: 'root',
+          database: 'Coderhouse'
+        }
+    },
+    sqlite3: {
+        client: "sqlite3",
+        connection: {
+          filename: "./DB/sqlite-db.sqlite",
+        },
+        useNullAsDefault: true
     }
 }

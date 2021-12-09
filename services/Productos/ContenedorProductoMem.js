@@ -1,6 +1,6 @@
 class ContenedorProductoMem {
   constructor() {
-    this.productos = [];
+    this.productos = this.productos ? this.productos : [];
   }
 
   async getAll(id) {
@@ -17,8 +17,11 @@ class ContenedorProductoMem {
   async getById(id) {
     try {
       const producto = await this.productos.find((elem) => elem.id == id);
+      console.log(this.productos);
+      console.log(producto);
       return producto;
     } catch (e) {
+      console.log(e)
       throw new Error(e);
     }
   }

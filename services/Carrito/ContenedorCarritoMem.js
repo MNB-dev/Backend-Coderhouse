@@ -74,30 +74,41 @@ class ContenedorArchivoMem {
 
   async addProducto(id, id_prod) {
     try {
-      const index = this.carritos.find((elem) => elem.id == id);
-      if (index == -1) {
+      const contenedor = new ContenedorProductoMem();
+      const carrito = this.carritos.find((elem) => elem.id == id);
+      if (!carrito) {
         throw new Error(`Error al borrar: elemento no encontrado`);
-      } else {
-        const p = await contenedor.getById(id_prod);
-
-        if (!p) return "El producto no existe";
-
-        this.carritos.push({ productos: id_prod });
       }
 
-      const agregado = await update(carrito);
+      console.log(contenedor)
+      console.log(carrito);
+      console.log(id_prod);
 
-      if (!agregado) return "No pudo ser agregado.";
+      const p = await contenedor.getById(id_prod);
+
+      console.log(p);
+
+      if (!p) return "El producto no existe";
+
+      carrito.productos.push({ productos: id_prod });
+
+/*       const agregado = await update(carrito);
+
+      if (!agregado) return "No pudo ser agregado."; */
 
       return;
     } catch (e) {
+      console.log(e);
       throw new Error(e);
     }
   }
 
   async createCarrito() {
     try {
-      const id = this.carritos.length > 0 ? this.carritos[this.carritos.length - 1].id + 1 : 0;
+      const id =
+        this.carritos.length > 0
+          ? this.carritos[this.carritos.length - 1].id + 1
+          : 0;
       const carrito = {
         id: id,
         timestamp: Date.now(),
