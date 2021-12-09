@@ -55,7 +55,7 @@ const connectedServer = httpServer.listen(PORT, async () => {
 
   console.log(bd);
 
-  if (bd == "mysql" || bd == "sql3") {
+  if (bd == "mysql" || bd == "sqlite3") {
     const sql = new ClienteSql();
 
     await sql.crearTablaCarrito();
