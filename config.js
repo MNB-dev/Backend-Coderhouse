@@ -20,10 +20,6 @@ export default {
             uri: "mongodb+srv://coderhouse:coderhouse@cluster0.8z1uy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
         }
     },
-    archivo: {
-        carritoURL: "/public/carrito.txt",
-        productosURL: "/public/productos.txt"
-    },
     mysql:{
         client: 'mysql',
         connection: {

@@ -1,10 +1,8 @@
 import fs from "fs";
-import path from 'path';
-import config from '../../config.js';
 import ContenedorProductoArchivo from '../Productos/ContenedorProductoArchivo.js';
+const url = "./public/carrito.txt";
 
-const __dirname = path.resolve();
-const url = __dirname + config.archivo.carritoURL;
+console.log(url)
 class Contenedor {
   constructor() {}
 
@@ -71,6 +69,7 @@ class Contenedor {
 
       return carrito[0];
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -103,17 +102,17 @@ class Contenedor {
     try {
       let data = await fs.promises.readFile(url, "utf-8");
       data = JSON.parse(data);
+      data = data.filter((element) => {
+        return element.id == carritoId;
+      });
 
-      data.forEach((element) => {
-        if(element.id == carritoId) {
-          element.productos = element.productos.filter((p) => {
-            return p.id != productoId
-          });
-        }
+      data[0].productos = data[0].productos.filter((element) => {
+        return element != productoId;
       });
 
       await fs.promises.writeFile(url, JSON.stringify(data, null, 2));
     } catch (error) {
+      console.log(error);
      throw error;
     }
   }
@@ -168,6 +167,7 @@ class ContenedorCarritoArchivo {
 
       return;
     } catch (e) {
+      console.log(e);
       throw new Error(e);
     }
   }
@@ -182,6 +182,7 @@ class ContenedorCarritoArchivo {
 
       return `Se creó un carrito con id: ${carrito.id}`;
     } catch (e) {
+      console.log(e);
       throw new Error(e);
     }
   }

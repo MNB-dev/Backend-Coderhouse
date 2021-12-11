@@ -1,8 +1,5 @@
 import fs from "fs";
-import path from 'path';
-import config from '../../config.js';
-const __dirname = path.resolve();
-const url = __dirname + config.archivo.productoURL;
+const url = "./public/productos.txt";
 
 class Contenedor {
   constructor() {}
@@ -84,9 +81,10 @@ class Contenedor {
       data = data.filter((element) => {
         return element.id != id;
       });
-
+      
       await fs.promises.writeFile(url, JSON.stringify(data, null, 2));
     } catch (error) {
+      console.error(error)
       console.log(error);
     }
   }
