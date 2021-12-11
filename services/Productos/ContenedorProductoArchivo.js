@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from 'path';
-import config from '../config.js';
+import config from '../../config.js';
 const __dirname = path.resolve();
 const url = __dirname + config.archivo.productoURL;
 

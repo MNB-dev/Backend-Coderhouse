@@ -5,12 +5,6 @@ dotenv.config();
 let carritoDao, productosDao; 
 
 switch (process.env.SERVICE) {
-    case 'json':
-        const { default: ProductosDaoArchivo } = await import('./Productos/ProductosDaoArchivo.js')
-        productosDao = new ProductosDaoArchivo();
-        const { default: CarritoDaoArchivo } = await import('./carrito/carritoDaoArchivo.js')
-        carritoDao = new CarritoDaoArchivo();
-        break
     case 'firebase':
         const { db } = await import('../db/firebase-db.js');
         const { default: ProductosDaoFirebase } = await import('./Productos/ProductosDaoFirebase.js')
@@ -37,10 +31,10 @@ switch (process.env.SERVICE) {
         carritoDao = new CarritoDaoMariaDB();
         break
     default:
-        const { default: ProductosDaoMem } = await import('./Productos/ProductosDaoMem.js')
-        productosDao = new ProductosDaoMem();
-        const { default: CarritoDaoMem } = await import('./carrito/CarritoDaoMem.js')
-        carritoDao = new CarritoDaoMem();
+        const { default: ProductosDaoArchivo } = await import('./Productos/ProductosDaoArchivo.js')
+        productosDao = new ProductosDaoArchivo();
+        const { default: CarritoDaoArchivo } = await import('./carrito/carritoDaoArchivo.js')
+        carritoDao = new CarritoDaoArchivo();
         break
 }
 

@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from 'path';
-import config from '../config.js';
+import config from '../../config.js';
 import ContenedorProductoArchivo from '../Productos/ContenedorProductoArchivo.js';
 
 const __dirname = path.resolve();
