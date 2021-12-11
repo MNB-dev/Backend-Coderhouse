@@ -19,7 +19,6 @@ const sql3 = new ClienteSql({
 });
 
 const indexRouter = require("./routes/index");
-const hb = require("express-handlebars");
 const { Server: HttpServer } = require("http");
 const { Server: IOServer } = require("socket.io");
 const productosService = require("./Services/productos-bd");
@@ -55,19 +54,8 @@ io.on("connection", async (socket) => {
 
 //--------------------------------------------
 
-app.engine(
-  "hbs",
-  hb({
-    extname: ".hbs",
-    defaultLayout: "index.hbs",
-    layoutsDir: __dirname + "/views/layout",
-    partialsDir: __dirname + "/views/partials/",
-  })
-);
-
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "hbs");
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 app.use(express.static("public"));
 
 app.use(express.json());

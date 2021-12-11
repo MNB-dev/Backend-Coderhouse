@@ -1,3 +1,6 @@
+const faker = require('faker');
+faker.locale = 'es'
+const { commerce, datatype, image } = faker
 const { options } = require('./options/mysql');
 const ClienteSql = require('./sql');
 
@@ -56,4 +59,17 @@ module.exports = {
       console.log(e);
     }
   },
+  getRandom: async () => {
+    try {
+      let res = [];
+
+      for (let i = 0; i < 6; i++) {
+        res.push({id: i, title: commerce.product(), price: datatype.number(100), thumbnail: image.imageUrl()})
+      }
+    
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };
