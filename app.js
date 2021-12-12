@@ -25,7 +25,7 @@ const productosService = require("./Services/productos-bd");
 const msgService = require("./Services/mensajes");
 const PORT = 8080;
 const productos = [];
-const mensajes = [];
+let mensajes = [];
 
 const app = express();
 const httpServer = new HttpServer(app);
@@ -49,6 +49,11 @@ io.on("connection", async (socket) => {
     mensajes.push(data);
     msgService.create(mensajes);
     io.sockets.emit("mensajes", mensajes);
+  });
+
+  socket.on("get-persona", async (data) => {
+    mensajes = await msgService.getAll();
+    io.sockets.emit("mostrar-mensajes", mensajes);
   });
 });
 
@@ -95,6 +100,7 @@ app.validateUser = validateUser;
 const connectedServer = httpServer.listen(PORT, async () => {
   await sql.crearTabla();
   await sql3.crearTabla3();
+
   console.log(
     `Servidor http escuchando en el puerto ${connectedServer.address().port}`
   );

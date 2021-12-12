@@ -6,7 +6,7 @@ formAgregarProducto.addEventListener("submit", (e) => {
   const producto = {
     titulo: formAgregarProducto[0].value,
     thumbnail: formAgregarProducto[1].value,
-    price: formAgregarProducto[2].value
+    price: formAgregarProducto[2].value,
   };
   socket.emit("update", producto);
   formAgregarProducto.reset();
@@ -26,8 +26,15 @@ const formAgregarPersona = document.getElementById("formAgregarPersona");
 formAgregarPersona.addEventListener("submit", (e) => {
   e.preventDefault();
   const p = {
-    mail: formAgregarPersona[0].value,
-    mensaje: formAgregarPersona[1].value,
+    autor: {
+      nombre: formAgregarPersona[0].value,
+      apellido: formAgregarPersona[1].value,
+      edad: formAgregarPersona[2].value,
+      alias: formAgregarPersona[3].value,
+      avatar: formAgregarPersona[4].value,
+      id: formAgregarPersona[5].value,
+    },
+    mensaje: formAgregarPersona[6].value,
     hora: new Date(),
   };
   socket.emit("update-persona", p);
@@ -52,8 +59,26 @@ async function manejarEventoPersona(msjs) {
         d.getMinutes() +
         ":" +
         d.getSeconds();
-      return `<h4 class="m-3"><span class="mail">${msj.mail} </span><span class="hora">${datestring} </span><span class="mensaje">${msj.mensaje}</span></h4>`;
+      return `<h4 class="m-3"><span class="mail">${msj.autor.nombre} </span><span class="hora">${datestring} </span><span class="mensaje">${msj.mensaje}</span></h4>`;
     })
     .join("<br>");
   document.getElementById("Persona").innerHTML = mensajesHTML;
+}
+
+async function obtenerMensajes() {
+  socket.emit("get-persona");
+}
+
+socket.on("mostrar-mensajes", manejarEventoMostrarMensajes);
+
+async function manejarEventoMostrarMensajes(msg) {
+  const mensajesHTML = msg.mensajes
+    .map((msj) => {
+      return `<h4 class="m-3"><span class="mail">${msj.autor.nombre} </span><span class="hora">${msj.timestamp} </span><span class="mensaje">${msj.mensaje}</span></h4>`;
+    })
+    .join("<br>");
+  document.getElementById("Persona").innerHTML = mensajesHTML;
+
+  const porcentajeHTML = `<h4 class="m-3"> PORCENTAJE DE COMPRESION: ${msg.tamaño} % </h4>`;
+  document.getElementById("Porcentaje").innerHTML = porcentajeHTML;
 }

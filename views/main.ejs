@@ -67,6 +67,60 @@
 
         <form id="formAgregarPersona">
           <div class="form-group">
+            <label for="Nombre">Nombre</label>
+            <input
+              id="txtNombre"
+              class="form-control"
+              type="text"
+              name="Nombre"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="Apellido">Apellido</label>
+            <input
+              id="txtApellido"
+              class="form-control"
+              type="text"
+              name="apellido"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="Edad">Edad</label>
+            <input
+              id="txtEdad"
+              class="form-control"
+              type="text"
+              name="Edad"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="Alias">Alias</label>
+            <input
+              id="txtAlias"
+              class="form-control"
+              type="text"
+              name="Alias"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="Avatar">Avatar</label>
+            <input
+              id="txtAvatar"
+              class="form-control"
+              type="text"
+              name="Avatar"
+            />
+          </div>
+
+          <div class="form-group">
             <label for="Mail">Mail</label>
             <input
               id="txtMail"
@@ -93,6 +147,12 @@
         <br />
         <div id="Persona"></div>
       </div>
+
+      <form id="formProductosRandom" onclick="obtenerMensajes()">
+        <button class="btn btn-warning" type='submit'>Obtener mensajes previos</button>
+      </form>
+
+      <div id="Porcentaje"></div>
     </div>
 
     <script src="javascripts/main.js"></script>
