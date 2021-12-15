@@ -102,13 +102,22 @@ class Contenedor {
     try {
       let data = await fs.promises.readFile(url, "utf-8");
       data = JSON.parse(data);
-      data = data.filter((element) => {
+
+      let carrito = data.filter((element) => {
         return element.id == carritoId;
       });
 
-      data[0].productos = data[0].productos.filter((element) => {
+      carrito[0].productos = data[0].productos.filter((element) => {
         return element != productoId;
       });
+
+      for (let index = 0; index < data.length; index++) {
+        const element = data[index];
+        
+        if(element.id == carrito[0].id){
+          element.productos = carrito[0].productos;
+        }
+      }
 
       await fs.promises.writeFile(url, JSON.stringify(data, null, 2));
     } catch (error) {
