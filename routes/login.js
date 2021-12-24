@@ -17,7 +17,7 @@ router.get(
       req.session.contador = 1
       req.session.nombre = req.query.name;
     }
-    
+        
     res.render("main", { layout: "index", nombre: req.query.name });
   }
 );

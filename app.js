@@ -71,14 +71,12 @@ app.use(express.static("public"));
 app.use(session({
   store: MongoStore.create({
       mongoUrl: config.mongo,
+      ttl: 10000,
       mongoOptions: advancedOptions
   }),
   secret: 'secret',
   resave: false,
-  saveUninitialized: false,
-/*   cookie:{
-    maxAge: 3600
-  } */
+  saveUninitialized: false
 }))
 
 app.use(express.json());
