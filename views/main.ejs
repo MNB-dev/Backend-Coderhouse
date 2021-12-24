@@ -19,7 +19,12 @@
   </head>
   <body>
     <div class="container">
-      <h1 class="m-3">Welcome</h1>
+      <div class="d-flex justify-content-between bg-success mb-3">
+        <h1 class="m-3">Welcome <%= nombre %></h1>
+        <form action='/login/salir' method='get'>
+          <button class="btn btn-warning" type='submit'>Desloguearse</button>
+        </form>
+      </div>
 
       <form id="formProductosRandom" action='/api/productos-test', method='get'>
         <button class="btn btn-warning" type='submit'>Obtener productos random</button>
@@ -156,5 +161,9 @@
     </div>
 
     <script src="javascripts/main.js"></script>
+
+<!--     <script>
+      console.log(window.location.href.split('/login')[0])
+    </script> -->
   </body>
 </html>

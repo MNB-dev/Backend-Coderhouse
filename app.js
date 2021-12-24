@@ -8,6 +8,10 @@ dotenv.config();
 const admin = toBoolean(process.env.ADMIN);
 const { options } = require('./Services/options/mysql');
 const ClienteSql = require('./Services/sql');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
 const sql = new ClienteSql(options);
 const sql3 = new ClienteSql({
@@ -18,7 +22,9 @@ const sql3 = new ClienteSql({
   useNullAsDefault: true
 });
 
+const config = require('./config');
 const indexRouter = require("./routes/index");
+const loginRouter = require("./routes/login");
 const { Server: HttpServer } = require("http");
 const { Server: IOServer } = require("socket.io");
 const productosService = require("./Services/productos-bd");
@@ -35,8 +41,6 @@ const io = new IOServer(httpServer);
 // configuro el socket
 
 io.on("connection", async (socket) => {
-  console.log('Nuevo cliente conectado!');
-
   socket.emit("productos", productos);
   socket.on("update", (producto) => {
     productos.push(producto);
@@ -63,9 +67,23 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
 
+//app.use(cookieParser);
+app.use(session({
+  store: MongoStore.create({
+      mongoUrl: config.mongo,
+      mongoOptions: advancedOptions
+  }),
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false,
+/*   cookie:{
+    maxAge: 3600
+  } */
+}))
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use("/", indexRouter);
+app.use("/login", loginRouter);
 app.use('/api', productosRouter);
 
 // catch 404 and forward to error handler
@@ -85,7 +103,6 @@ app.use(async (err, req, res, next) => {
   res.status(err.status || 500);
   res.json({ error: true, message: err });
 });
-
 
 function validateUser(req, res, next) {
     if (!admin) {

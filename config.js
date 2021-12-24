@@ -10,7 +10,8 @@ const config = {
         token_uri: "https://oauth2.googleapis.com/token",
         auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
         client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-zlayw%40coderhouse-625e1.iam.gserviceaccount.com"
-    }
+    },
+    mongo: "mongodb+srv://coderhouse:coderhouse@cluster0.8jfy9.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 }
 
 module.exports = config;
